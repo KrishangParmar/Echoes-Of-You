@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Echoes of You</title>
+  <link href="styles.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Nosifer&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+</head>
+<body>
+  <!-- Cinematic Intro Screen -->
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-content">
+      <p class="intro-line intro-line-1">This is not a place.</p>
+      <p class="intro-line intro-line-2">It is a reflection of your fading memory.</p>
+      <p class="intro-line intro-line-3">Fragments drift in the dark…</p>
+      <p class="intro-line intro-line-4">Follow the echoes, and find what remains.</p>
+    </div>
+    <div class="intro-scanlines"></div>
+  </div>
+
+  <!-- Animated CRT Background Canvas (Title Screen Only) -->
+  <canvas id="titleBgCanvas" class="title-bg-canvas"></canvas>
+  
+  <div class="bg-wrap" aria-hidden="true"></div>
+    <div class="bg-layer bg-back" id="bgBack"></div>
+    <div class="bg-layer bg-mid" id="bgMid"></div>
+    <div class="bg-layer bg-front" id="bgFront"></div>
+    <div class="bg-vignette"></div>
+  </div>
+
+  <div class="flash" id="flash"></div>
+
+  <div class="page" id="pageRoot">
+    <header class="hero" id="hero">
+      <img src="assets/gptfinalgrim.png" class="hero-reaper reaper-image" alt="reaper">
+      <div class="hero-content">
+        <div class="logo" id="logo">
+          <svg viewBox="0 0 100 100" width="60" height="60">
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <!-- Skull outline -->
+            <path d="M 50 15 
+                     C 30 15, 20 25, 20 40
+                     C 20 50, 22 58, 25 62
+                     L 25 75
+                     L 35 75
+                     L 35 85
+                     L 42 85
+                     L 42 75
+                     L 50 75
+                     L 58 75
+                     L 58 85
+                     L 65 85
+                     L 65 75
+                     L 75 75
+                     L 75 62
+                     C 78 58, 80 50, 80 40
+                     C 80 25, 70 15, 50 15 Z" 
+                  fill="#eaffea" 
+                  stroke="#39ff14" 
+                  stroke-width="2"
+                  filter="url(#glow)"/>
+            <!-- Left eye socket -->
+            <ellipse cx="37" cy="40" rx="9" ry="12" fill="#0a0a0a"/>
+            <!-- Right eye socket -->
+            <ellipse cx="63" cy="40" rx="9" ry="12" fill="#0a0a0a"/>
+            <!-- Nose cavity -->
+            <path d="M 50 52 L 45 60 L 50 58 L 55 60 Z" fill="#0a0a0a"/>
+            <!-- Zigzag teeth -->
+            <path d="M 30 75 L 35 85 L 42 75 L 50 85 L 58 75 L 65 85 L 70 75" 
+                  fill="none" 
+                  stroke="#0a0a0a" 
+                  stroke-width="3" 
+                  stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="title"><h1>Echoes of You</h1><div class="tag">Fight your past. Become unpredictable.</div></div>
+        <div class="hero-controls">
+          <div class="muted">Ghosts: <strong id="ghostCountTop">0</strong></div>
+          <div class="difficulty-selector">
+            <div class="difficulty-label-top">DIFFICULTY</div>
+            <div class="difficulty-options">
+              <button class="diff-option active" data-level="0">NORMAL</button>
+              <button class="diff-option" data-level="1">HARD</button>
+              <button class="diff-option" data-level="2">GOD</button>
+            </div>
+          </div>
+          <button class="btn" id="quickStart">Quick Start</button>
+          <button class="btn" id="howToPlayBtn">How to Play</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-module">
+      <div class="game-wrap" id="gameWrap">
+        <div class="game-glow"></div>
+        <div class="game-canvas-wrap" id="canvasWrap" tabindex="0">
+          <canvas id="game"></canvas>
+          <canvas id="particles"></canvas>
+          <canvas id="bats" class="bats-canvas"></canvas>
+          <canvas id="crt"></canvas>
+        </div>
+
+        <div class="controls">
+          <div class="left-controls">
+            <button id="startBtn" class="btn">Start Run</button>
+            <button id="endBtn" class="small">End Run</button>
+            <button id="clearBtn" class="small">Clear Ghosts</button>
+          </div>
+          <div class="right-stats">
+            Run: <strong id="runLabel">0</strong><br>
+            Lives: <strong id="lives">3</strong> • Score: <strong id="score">0</strong><br>
+            <span id="comboDisplay" style="color: #39ff14; font-weight: bold;"></span>
+          </div>
+          <div class="hud-effects" id="hudEffects"></div>
+        </div>
+      </div>
+
+      <div class="details">
+        <div>
+          <div class="card"><strong>How it works</strong><p>Start a run — your movement is recorded. End and save — it becomes a ghost that replays in future runs.</p></div>
+          <div class="card" style="margin-top:12px"><strong>Controls</strong><p>WASD / Arrows to move. Shift to dash. P to create demo ghost. R to respawn orbs. D to cycle difficulty.</p></div>
+        </div>
+
+        <aside>
+          <div class="card"><strong>Live Ghosts</strong><div id="ghostList" style="margin-top:8px"></div></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer>Echoes of You ~Krishang Parmar</footer>
+  </div>
+
+  <!-- How to Play Popup -->
+  <div class="popup-overlay" id="howToPlayPopup">
+    <div class="popup-box">
+      <h2 class="popup-title">How to Play</h2>
+      <p class="popup-intro-narrative">In a fading memory, you follow echoes of who you once were…</p>
+      <div class="popup-content"></div>
+        <h3>Objective</h3>
+        <p>Collect orbs while avoiding your past ghost replays. Each run you complete creates a new ghost that will haunt future runs.</p>
+        
+        <h3>Controls</h3>
+        <ul>
+          <li><strong>WASD</strong> or <strong>Arrow Keys</strong> - Move your character</li>
+          <li><strong>Shift</strong> - Dash (3x speed, invulnerable, cooldown)</li>
+          <li><strong>P</strong> - Create demo ghost (debug)</li>
+          <li><strong>R</strong> - Respawn orbs (debug)</li>
+          <li><strong>D</strong> - Cycle difficulty modes</li>
+        </ul>
+        
+        <h3>Orb Types</h3>
+        <ul>
+          <li><strong style="color: #39ff14;">Green</strong> - Normal orb (+100 points)</li>
+          <li><strong style="color: #00d4ff;">Blue</strong> - Speed boost (1.6x speed for 4.5s)</li>
+          <li><strong style="color: #ffd700;">Gold</strong> - Shield (blocks one hit for 5s)</li>
+          <li><strong style="color: #9d4edd;">Purple</strong> - Slow time (0.55x speed for 3.5s)</li>
+          <li><strong style="color: #ff006e;">Pink</strong> - Health (+1 life, max 5)</li>
+        </ul>
+        
+        <h3>Difficulty Modes</h3>
+        <ul>
+          <li><strong>NORMAL</strong> - Ghosts replay your movements, die on hit</li>
+          <li><strong>HARD</strong> - AI ghosts with drift, 50% survive hits</li>
+          <li><strong>GOD</strong> - Aggressive homing AI, immortal ghosts, can duplicate</li>
+        </ul>
+        
+        <h3>Combo System</h3>
+        <p>Collect orbs quickly to build combos! Every 3 orbs increases your multiplier (max 5x). Getting hit resets your combo.</p>
+      </div>
+      <button class="popup-close-btn" id="closePopupBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- Ending Screen -->
+  <div class="ending-screen" id="endingScreen">
+    <div class="ending-content">
+      <p class="ending-line ending-line-1">You found your final echo.</p>
+      <p class="ending-line ending-line-2">Some memories never fade.</p>
+      <p class="ending-line ending-line-3">Thank you for playing.</p>
+      <button class="btn ending-return-btn" id="endingReturnBtn">Return to Title</button>
+    </div>
+    <div class="ending-scanlines"></div>
+  </div>
+
+  <script src="game.js?v=14" defer></script>
+</body>
+</html>
