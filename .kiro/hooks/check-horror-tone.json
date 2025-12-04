@@ -1,0 +1,12 @@
+{
+  "name": "Horror Tone Check",
+  "description": "Review text content for consistency with horror atmosphere",
+  "trigger": {
+    "type": "manual"
+  },
+  "action": {
+    "type": "message",
+    "message": "Review all question text and ending descriptions in game.js. Ensure they maintain a consistent horror/psychological thriller tone. Flag any content that feels too lighthearted or breaks immersion."
+  },
+  "enabled": true
+}

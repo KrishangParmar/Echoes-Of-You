@@ -1,0 +1,13 @@
+{
+  "name": "Validate Audio References",
+  "description": "Check that audio files referenced in code actually exist in assets folder",
+  "trigger": {
+    "type": "onFileSave",
+    "filePattern": "**/game.js"
+  },
+  "action": {
+    "type": "message",
+    "message": "Check that all audio file references in game.js point to existing files in the assets folder. List any missing audio files."
+  },
+  "enabled": true
+}

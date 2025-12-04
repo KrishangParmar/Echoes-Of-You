@@ -1,0 +1,13 @@
+{
+  "name": "Update Documentation",
+  "description": "Remind to update relevant documentation when core files change",
+  "trigger": {
+    "type": "onFileSave",
+    "filePattern": "{game.js,index.html,styles.css}"
+  },
+  "action": {
+    "type": "message",
+    "message": "Core file ${file} was modified. Check if any documentation files (FEATURES_README.md, QUICKSTART.md, etc.) need to be updated to reflect these changes."
+  },
+  "enabled": true
+}

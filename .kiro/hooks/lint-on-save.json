@@ -1,0 +1,13 @@
+{
+  "name": "Lint JavaScript",
+  "description": "Check for common JavaScript errors and style issues",
+  "trigger": {
+    "type": "onFileSave",
+    "filePattern": "**/*.js"
+  },
+  "action": {
+    "type": "message",
+    "message": "Review ${file} for: 1) Unused variables, 2) Missing semicolons, 3) Console.log statements that should be removed, 4) Potential null/undefined errors, 5) Inconsistent naming conventions"
+  },
+  "enabled": false
+}

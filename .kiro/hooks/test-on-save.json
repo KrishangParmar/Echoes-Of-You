@@ -1,0 +1,13 @@
+{
+  "name": "Run Tests on Save",
+  "description": "Automatically run game tests when JavaScript files are saved",
+  "trigger": {
+    "type": "onFileSave",
+    "filePattern": "**/*.js"
+  },
+  "action": {
+    "type": "command",
+    "command": "echo Running tests for ${file}... && node --test || echo No test runner configured"
+  },
+  "enabled": true
+}
